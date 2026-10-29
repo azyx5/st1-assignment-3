@@ -2,8 +2,8 @@
 
 Complete this one group record. Link actual issues, diffs, tests and reviews; avoid copying entire histories. Blank fields are intentional. Duplicate rows as needed. Use synthetic data only. Every member records their own meaningful contribution. Do not invent results, reviews or Copilot use.
 
-- Group/tutorial: [response]
-- Members, GitHub usernames and cohorts: [response]
+- Group/tutorial: [Group 2, Monday 9:30 - 11:30]
+- Members, GitHub usernames and cohorts: [Rashid, Jaspreet, Shahdeen]
 - Repository URL: [response]
 - Starting SHA: [response]
 
@@ -11,35 +11,35 @@ Complete this one group record. Link actual issues, diffs, tests and reviews; av
 
 ### FR-02 Patient Search
 
-- Title: [response]
-- Context: [response]
-- Requirement: [response]
-- Acceptance criteria: [response]
+- Title: [Patient Search]
+- Context: [Using this features allows users to search for patients in the system]
+- Requirement: [Search bar, database, link patients to appointment history]
+- Acceptance criteria: [This feature will only work if there is a patient in the system that has the same name or id that was used in the patient search]
 - Scope: [response]
-- Definition of Done: [response]
-- Owner: [response]
+- Definition of Done: [The feature is able to find the patients that the user is wanting to find. It should also respond with a message saying failed to find the patient if that name or id was not found in the system.]
+- Owner: [Class Patient]
 - Actual issue link: [response]
 
 ### FR-06 Appointment Cancellation with FR-07 retained history
 
-- Title: [response]
-- Context: [response]
-- Requirement: [response]
-- Acceptance criteria: [response]
+- Title: [Appointment Cancellation]
+- Context: [When canceling a appointment the system should still keep record of that appointment]
+- Requirement: [Appointment, database]
+- Acceptance criteria: [This feature should only work when a user cancels an appointment]
 - Scope: [response]
-- Definition of Done: [response]
-- Owner: [response]
+- Definition of Done: [The feature is done when it is able to allow users to cancel an appointment and record that appointment]
+- Owner: [Class Appointment]
 - Actual issue link: [response]
 
 ## B Commit quality
 
 | Original example | Strong or Weak | Reason |
 |---|---|---|
-| changes | [select] | [response] |
-| final version | [select] | [response] |
-| Add patient search by ID | [select] | [response] |
-| fix stuff | [select] | [response] |
-| Prevent cancellation of completed appointments | [select] | [response] |
+| changes | [Weak] | [This is a weak commit because it does not tell us what type of changes were actually made] |
+| final version | [Weak] | [Although it sounds like the finished product, but what if something still needed to be worked on but the message says everything is completed] |
+| Add patient search by ID | [Strong] | [This commit tells users what was worked on clearly] |
+| fix stuff | [Weak] | [The response is weak, it tells us that something needs to be fixed, but not tellings us the exact issue] |
+| Prevent cancellation of completed appointments | [Strong] | [This message tells us that a feature or rule that prevents completed appointments is added so important data won't go missing] |
 
 ## C Over scoped PR review
 
@@ -54,10 +54,10 @@ A cancellation PR also renames unrelated patient fields, restructures unrelated 
 
 GitHub Copilot says: "Looks good; tests pass."
 
-- Missing evidence: [response]
-- Follow-up review question 1: [response]
-- Follow-up review question 2: [response]
-- Follow-up review question 3: [response]
+- Missing evidence: [The review is saying everything is good, but the evidence on what is good or what passed the test is not there. We also don't know if the test was just read over or it was actually runned]
+- Follow-up review question 1: [why did the test pass]
+- Follow-up review question 2: [Where is the proof that the content of the test actually passed]
+- Follow-up review question 3: [Was your test just a read through or also running the code so see if it actually works]
 - Follow-up review question 4: [response]
 - Follow-up review question 5: [response]
 - Additional questions if useful: [response]
@@ -66,9 +66,9 @@ GitHub Copilot says: "Looks good; tests pass."
 
 | Practice | Team agreement |
 |---|---|
-| Branch naming | [response] |
-| Commit message convention | [response] |
-| PR size | [response] |
+| Branch naming | [The names should be simple but strong meaning the name should tell users what that branch is being used for] |
+| Commit message convention | [writing commits this way can be used to tells user about thwats been commited in more detail] |
+| PR size | [The pull request sizes should only be about on document per commit to keep things simple] |
 | Another-member review requirement | [response] |
 | Merge rule | [response] |
 | Significant Copilot disclosure rule | [response] |
