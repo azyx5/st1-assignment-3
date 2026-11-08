@@ -14,34 +14,40 @@ For each requirement, propose one positive test, one negative test and the key a
 
 | Requirement | Positive test | Negative test | Key assertion |
 |---|---|---|---|
-| FR-01 Register patient | [response] | [response] | [response] |
-| FR-05 Prevent practitioner conflict | [response] | [response] | [response] |
-| FR-06 Cancel appointment | [response] | [response] | [response] |
-| FR-07 Retain cancelled history | [response] | [response] | [response] |
+| FR-01 Register patient | [Register a patient with a valid ID like P5 and name as Alexandra Fox, under PatientSerrvice.register_patient] | [trying to register an existing ID] | [key asserting would include find patient, with negative raising a value/lookup error] |
+| FR-05 Prevent practitioner conflict | [book appointment for a practitioner D2 at WHEN when D1 is already booked at WHEN] | [a double booking attemt at the same WHEN with same practitioner D1] | [practitioner D2 can have WHEN1 time for different patient, but D1 can't have an extra booking at WHEN1 when an existing appointment is scheduled, so second patient must have to wait or book another practitioner. raises a value error at AppointmentService.book_appointment] |
+| FR-06 Cancel appointment | [cancelling existing appointment A1 through AppointmentService.cancel_appointment] | [cancelling an already cancelled appt A1 or completed status appt] | [assert cancelled is appt, if negative raises value error: AppointmentService.cancel_appointment] |
+| FR-07 Retain cancelled history | [retrieve all appointments, incl cancelled, A1: find_apointment, list_appointments] | [retrieving unregistered appt ID RANDOM1] | [AppointmentService.find_appointment A1 in session.store.list_appointments, otherwise raises lookup error for RANDOM1 A] |
 
 ### Activity 2 Strong or weak assertion
 
 For each, select Strong for stated behaviour or Weak/unclear and explain why. State the behaviour and limits.
 
 `assert True`
-Judgement: [Strong for stated behaviour / Weak/unclear]  Why: [response]
+Judgement: [Weak/unclear]  Why: [execution without handled exception, return values, attribitues, status transition etc not checked]
 
 `assert appointment is not None`
-Judgement: [Strong for stated behaviour / Weak/unclear]  Why: [response]
+Judgement: [Weak/unclear]  Why: [can't verify wherger an object is correct or not, concerning retained data, valid/invalid fields, scheduled/cancelled]
 
 `assert appointment.status == AppointmentStatus.CANCELLED`
-Judgement: [Strong for stated behaviour / Weak/unclear]  Why: [response]
+Judgement: [Strong for stated behaviour]  Why: [verifies cancelled]
 
 `assert len(results) > 0`
-Judgement: [Strong for stated behaviour / Weak/unclear]  Why: [response]
+Judgement: [Weak/unclear]  Why: [list is non-empty]
 
 `assert data_store.find_appointment('A1') is appointment`
-Judgement: [Strong for stated behaviour / Weak/unclear]  Why: [response]
+Judgement: [Strong for stated behaviour]  Why: [exact python object (is) and proves that shared data is well retained]
 
 ### Activity 3 Boundary thinking
 
 Design boundary or edge cases for blank identifiers, whitespace-only names, same-time practitioner bookings, cancelled appointments and invalid status transitions.
-For each input/state, expected result and supporting contract: [response]
+For each input/state, expected result and supporting contract: [
+    Blank identifiers - patient_id, value error
+    whitespace-only names - name = ' ', value error
+    same-time practitioner bookings - one raises valueerror, other passes, allowing for prevention of conflict
+    cancelled appointments - rebooking can happen
+    invalid status transitions. - value error
+]
 
 ### Activity 4 Critique GitHub Copilot tests
 
@@ -49,16 +55,16 @@ GitHub Copilot generates five tests, all of which pass. Two only assert that obj
 
 | Candidate | What is wrong | Rewritten test intention |
 |---|---|---|
-| 1 | [response] | [response] |
-| 2 | [response] | [response] |
-| 3 | [response] | [response] |
-| 4 | [response] | [response] |
-| 5 | [response] | [response] |
+| 1 | [asserts only patient] | [verify call returns exact same object with same attributes and matching fields] |
+| 2 | [asserts true means execution without a crash] | [transitions status correct] |
+| 3 | [appt is not none may pass] | [find_appointment returns exact appointment record with all attributes] |
+| 4 | [sms notification] | [response] |
+| 5 | [notification, unneded requirement] | [status transition updated, data retrievable] |
 
 ### Tutorial exit question
 
 Why can 100% code coverage coexist with poor software verification?
-[response]
+[measures execution. does not validate assertions executed or if they were checked, or whether other aspects like edge cases above were verified]
 
 ## B Requirement to Test Traceability Matrix
 
