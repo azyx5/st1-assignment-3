@@ -57,7 +57,7 @@ def setup_session() -> Session:
         appointment=appointment,
     )
 
-
+#FR01-02 Patient Lookup/search & registration
 def test_find_patient_returns_registered_object() -> None:
     """A registered patient ID must return the original object."""
     session = setup_session()
@@ -90,6 +90,7 @@ def test_find_unknown_patient_raises_lookup_error() -> None:
     assert session.store.find_patient('P2') is None
 
 
+#FR03 Practitioner Lookup & registration
 def test_find_practitioner_returns_registered_object() -> None:
     """A registered practitioner ID must return the original object."""
     session = setup_session()
@@ -121,7 +122,7 @@ def test_find_unknown_practitioner_raises_lookup_error() -> None:
         session.practitioner_service.find_practitioner('D2')
     assert session.store.find_practitioner('D2') is None
 
-
+# FR06-FR07 Appointment Lookup/retained history & Cancellation
 def test_cancel_appointment_returns_cancelled_object() -> None:
     """Cancel should return the original appointment object in the cancelled state."""
     session = setup_session()
