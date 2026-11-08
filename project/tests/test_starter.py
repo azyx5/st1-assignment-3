@@ -1,8 +1,12 @@
 """Checks of supplied foundation only; assessed TODOs are not called."""
 
+import importlib
 from datetime import datetime
 
-import pytest
+try:
+    pytest = importlib.import_module('pytest')
+except ModuleNotFoundError:  # pragma: no cover - pytest is expected in test envs
+    pytest = None  # type: ignore[assignment]
 
 from smartcare.data_store import SmartCareDataStore
 from smartcare.domain import (

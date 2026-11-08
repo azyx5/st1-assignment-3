@@ -35,8 +35,13 @@ class PatientService:
         a blank/invalid ID. It must not create a replacement patient.
         The starter deliberately raises NotImplementedError.
         """
-        raise NotImplementedError('Stage 6: patient lookup')
-
+        # Stage 6 implementation under TODO: return the stored patient for a valid patient ID.
+        patient = self.data_store.find_patient(patient_id)
+        if patient is None:
+            raise LookupError('Patient not found')
+        if not patient_id.strip():
+            raise ValueError('Invalid patient ID')
+        return patient
 
 class PractitionerService:
     """Coordinate practitioner registration and lookup through the shared
@@ -71,7 +76,13 @@ class PractitionerService:
         practitioner. The starter deliberately raises
         NotImplementedError.
         """
-        raise NotImplementedError('Stage 6: practitioner lookup')
+        # Stage 6 implementation under TODO: return the stored practitioner for a valid ID.
+        practitioner = self.data_store.find_practitioner(practitioner_id)
+        if practitioner is None:
+            raise LookupError('Practitioner not found')
+        if not practitioner_id.strip():
+            raise ValueError('Invalid practitioner ID')
+        return practitioner
 
 
 class AppointmentService:
@@ -139,8 +150,12 @@ class AppointmentService:
         Return the cancelled object. Unknown IDs raise LookupError;
         invalid transitions raise ValueError and leave state unchanged.
         """
-        raise NotImplementedError('Stage 6: appointment cancellation')
-
+        appointment = self.data_store.find_appointment(appointment_id)
+        if appointment is None:
+            raise LookupError('Appointment not found')
+        appointment.cancel()
+        return appointment
+    
     def list_practitioner_appointments(
         self,
         practitioner_id: str,
@@ -152,4 +167,4 @@ class AppointmentService:
         ValueError; a known practitioner with no matches returns an
         empty list.
         """
-        raise NotImplementedError('Stage 9: practitioner appointments')
+        raise NotImplementedError('Stage 9: practitioner appointments') 
