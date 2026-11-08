@@ -152,87 +152,91 @@ invalid transitions to raise ValueError and leave state unchanged
 
 ## I Human versus Copilot review comparison
 
-- Human reviewer noticed before consulting Copilot: [response]
-- Copilot noticed: [response]
-- Overlap: [response]
-- What did the human reviewer notice that Copilot did not: [response]
-- What did Copilot identify that the human reviewer initially missed: [response]
-- Unsupported or incorrect Copilot suggestion: [response or none identified with explanation]
-- Human judgement accepted, modified or rejected, and why: [response]
-- Which evidence justified merge approval: [response]
+- Human reviewer noticed before consulting Copilot: [checked data_store.py, services.py, doamin.py, case-sensitivity of IDs, invalid/unknown IDs cancelling non-existents]
+- Copilot noticed: [boundary validation, cancellation must preserve appointment object and domain state, unknown IDs vs invalid,  etc.]
+- Overlap: [invalid/unknownIDs, value and lookup errors, history retainment]
+- What did the human reviewer notice that Copilot did not: [cancelling non-existents]
+- What did Copilot identify that the human reviewer initially missed: [boundary validation like parameters,]
+- Unsupported or incorrect Copilot suggestion: [none as such]
+- Human judgement accepted, modified or rejected, and why: [accepted, boundaries and other suggestions help in parameters and solodifying code and app functionality]
+- Which evidence justified merge approval: [53 tests all passed in 0.03 seconds]
 
 ## J Contributions
 
 Repeat per member. Include only categories that describe actual work; write not applicable where appropriate. Pairing or mentoring can be supported by a short corroborated note.
 
-- Member: [response]
-- Implementation: [work and evidence]
-- Testing: [work and evidence]
-- Review: [work and evidence]
-- Issue refinement: [work and evidence]
-- Design and responsibility discussion: [work and evidence]
-- Debugging or integration: [work and evidence]
-- Documentation or team support: [work and evidence]
+- Member: [Rashid]
+- Implementation: [Services.py, test_services.py, half of stage6.md file]
+- Testing: [test_services.py passed with 53 tests]
+- Review: [Jaspreet reviewed]
+- Issue refinement: [issues were with environment and pytest module, fixed with side bar copilot chatbot]
+- Design and responsibility discussion: [architechtural boundaries, state transitions etc]
+- Debugging or integration: [tests passed]
+- Documentation or team support: [documente team workflow.]
+
+# Jaspreet did half of stage6.md file with me
 
 ## K Exit question
 
 Why is a high commit count not necessarily evidence of strong contribution?
+A high commit count is or can be easily shown high through unnecessary commits or tiny commits on the littlest of changes. A smaller number with higher quality of work shows consistency not in terms of just the number of commits but also quality of commits. Contribution has precursors such as quality, actual impact abd acurate peer review. 
 
-[response]
 
 ## L Stage 6 formative questions
 
 1. What is version control?
 
-[response]
+[Version control is maintaining control of each version of code/changes and pushed to github, it shows a history of commits, changes, current form, track modification/changes etc.]
 
 2. Why is a feature branch useful?
 
-[response]
+[a feature branch is useful in terms of separating new development from the main branch, preventing broken code from affecting the whole program/team/contribution. More separation means more review, and integration once it is complete accurate.]
 
 3. What makes a commit a good engineering commit?
 
-[response]
+[A commit is a good engineering commit if it has qality and hasn't been bombed with minor changes which count for quantity, shouldn't break the main build of the program, and a clear commit message.]
 
 4. What is a pull request?
 
-[response]
+[A pull request is a request other members can do in terminal to receive latest version and helps in branching]
 
 5. What is the purpose of code review?
 
-[response]
+[Purpose of code review is to have everyone in the team understand the code and so that the code is not incorrect and/or does not hinder the program and makes sure that the any changes are readable, enable functionality and are secure.]
 
 6. What does a Git diff show?
 
-[response]
+[A git diff shows line-by-line differences between repositories]
 
 7. What is a Definition of Done?
 
-[response]
+[Definition of done is a criteria/rubric of what a fulfilled requirement should look like upon implementation]
 
 8. What is the appropriate role of GitHub Copilot in pull-request review?
 
-[response]
+[Its mostly an assistant, can't execute tests like we found out earlier in this doc. Shouldn't be heavily relied on, human intervention is always key]
 
 9. Why should individual contribution not be judged only by commit count?
 
-[response]
+[Depends on quality too, I may make 100 commits but all of tiny and minor changes, whereas anoher group member may make 5/10 commits that are more meaninigful and have quality of work done.]
 
 10. What is the Stage 6 engineering rule?
 
-[response]
+[Devs must implement the 3 TODOs in stage 6, unit tests, peer review.]
 
 ## M Completion and handover
 
-- Starting SHA: [response]
+- Starting SHA: [02245b4]
 - Final Stage 6 code SHA: [response]
-- Test command: [response]
-- Working directory: [response]
-- Observed result: [response]
-- PR and another-member reviewer: [links]
-- Unresolved issue or none: [response]
-- Stage 7 handover status: [ready for tutor checkpoint / unresolved work]
+- Test command: [python3 -m pytest tests/test_services.py -q in test_services.py]
+- Working directory: [project/tests, project/smartcare, stage 6 .md file.]
+- Observed result: [53 tests passed in 0.03 seconds]
+- PR and another-member reviewer: [Jaspreet]
+- Unresolved issue or none: [none]
+- Stage 7 handover status: [ready for tutor checkpoint]
 - Final submitted SHA if later than tested SHA: [response and evidence-only difference]
+
+# all done
 
 - [ ] Three Stage 6 service targets completed and checked.
 - [ ] Original supplied tests retained and passing.
