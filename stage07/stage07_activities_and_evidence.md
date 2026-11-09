@@ -154,6 +154,23 @@ Use fresh shared SmartCareDataStore state, registered objects and completed Stag
 |---|---|---|---|---|
 | [complete] | [complete] | [complete] | [complete] | [complete] |
 
+Test-SRV-01 Valid patients registration stores and returns object. FR-01 / AC-01.1 tests/test_services.py::test_register_patient_stores_and_returns_patient Passed 
+Test-SRV-02 Duplicated patients records rejected FR-01 / AC-01.2 tests/test_services.py::test_register_patient_duplicate_id_preserves_original Passed 
+Test-SRV-03 Patient search returns registered object. FR-02 / AC-02.1 tests/test_services.py::test_find_patient_returns_registered_object 
+Test-SRV-04 Patient Look up is case sensitive. FR-02 / Validation tests/test_services.py::test_find_patient_is_case_sensitive Passed 
+Test-SRV-05 Unknown patient lookup raises LookupError. FR-02 / AC-02.2 tests/test_services.py::test_find_unknown_patient_raises_lookup_error Passed 
+Test-SRV-06 Invalid patient ID raises ValueError. FR-02 / Validation tests/test_services.py::test_find_patient_invalid_id_raises_value_error Passed 
+Test-SRV-07 Practitioner lookup returns registered object FR-03 / Lookup tests/test_services.py::test_find_practitioner_returns_registered_object Passed 
+Test-SRV-08 Unknown practitioner lookup raises LookupError. FR-03 / Lookup tests/test_services.py::test_find_unknown_practitioner_raises_lookup_error Passed 
+Test-SRV-9 Invalid practitioner ID raises ValueError. FR-03 / Validation tests/test_services.py::test_find_practitioner_invalid_id_raises_value_error Passed 
+Test-SRV-10 Appointment booking links objects and stores. FR-04 / AC-03.1 tests/test_services.py::test_book_appointment_stores_and_links_participants Passed 
+Test-SRV-11 Booking duplicate appointment ID raises ValueError. FR-04 / Invariant tests/test_services.py::test_book_appointment_duplicate_id_preserves_original Passed 
+Test-SRV-12 Same practitioner time conflict raises ValueError. FR-05 / AC-04.1 tests/test_services.py::test_practitioner_conflict_same_time_rejected Passed 
+Test-SRV-13 Cancelled appointment stays in history. FR-07 / AC-05.2 tests/test_services.py::test_cancelled_appointment_is_retained_and_retrievable Passed 
+Test-SRV-14 Canceling a COMPLETED appointment raises ValueError. FR-06 / Guard tests/test_services.py::test_cancel_completed_appointment_rejected_without_change Passed 
+Test-SRV-15 Cancellation of appointment frees practitioner slot for booking. FR-05 / FR-06 tests/test_services.py::test_cancellation_frees_slot_and_keeps_history Passed 
+
+
 ## G Negative and Boundary Cases
 
 Connect cases to actual contracts and verify unchanged state after rejection.
@@ -161,33 +178,75 @@ Connect cases to actual contracts and verify unchanged state after rejection.
 | Behaviour | Boundary/invalid input | Expected result | Test ID |
 |---|---|---|---|
 | [complete] | [complete] | [complete] | [complete] |
+Creating Patient ID check. | Empty string '', whitespace ' ', None, non-string 123 | Raises ValueError('Patient ID cannot be blank'), no object constructed TEST-DOM-02 
+Creating Patient name check. | Empty string '', whitespace ' ', None, non-string 456 | Raises ValueError('Patient name cannot be blank'), no object constructed TEST-DOM-03 
+Appointment Patient or Practitioner type check. | Non-Patient or non-Practitioner passed to constructor | Raises ValueError('Appointment requires a Patient/Practitioner object') TEST-DOM-08 
+Unknown patient lookup. | Searching 'P404' | Raises LookupError('Patient not found'), store unmodified TEST-SRV-06 
+Invalid ID lookup type. | Blank string '', ' ', None, int 7 | Raises ValueError, no store search executed TEST-SRV-15 
+Exact practitioner and time conflict. | Booking second appointment for D1 at exact minute WHEN | Raises ValueError('Practitioner already has a SCHEDULED...'), store unmodified TEST-SRV-17 
+Cancellation of a COMPLETED appointment. | Calling cancel on appointment in COMPLETED status | Raises ValueError('Only SCHEDULED appointments may be cancelled'), status stays COMPLETED TEST-DOM-13, TEST-SRV-23 
+
+
 
 ## H GitHub Copilot Test Design
 
 Select ONE real acceptance criterion. Complete human-first fields before using Copilot. Do not require an accepted generated test.
 
-Requirement: [complete]
-Acceptance criterion: [quote]
-Behaviour to test: [complete]
-Human-first test idea/categories: [complete]
-Prompt and purpose: [complete or link]
+Requirement: [FR-05 Prevent practitioner conflict Acceptance criterion: AC-04.1 and AC-04.2: Same practitioner/exact time/SCHEDULED conflicts]
+Acceptance criterion: [Another practitioner at the same time is allowed]
+Behaviour to test: [AppointmentService.book_appointment must reject booking when the target practitioner already has a SCHEDULED appointment at the exact datetime (ValueError), but allow booking at the same datetime for a different practitioner, and allow rebooking after cancellation]
+Human-first test idea/categories: [Negative case: Booking practitioner D1 at time T1 when D1 already has a SCHEDULED appointment at T1 raises ValueError. Positive case: Booking practitioner D2 at time T1 when D1 is booked at T1 succeeds. Boundary case: Booking practitioner D1 at time T1 after the original booking at T1 is CANCELLED succeeds]
+Prompt and purpose: [Act as a software test-design assistant. Requirement: FR-05 Prevent practitioner conflict Acceptance criterion: AC-04.1 and AC-04.2: Same practitioner at exact time and is SCHEDULED conflicts; another practitioner at the same time is allowed. Propose pytest test candidates covering a valid case, an invalid case and meaningful boundaries. For each candidate, state exactly which required behaviour it is intended to verify. Do not invent behaviour not stated in the requirement or criterion. Use observable outcomes rather than private implementation details. Use the current SmartCare public contracts and shared SmartCareDataStore. Do not introduce SQLite, repository abstractions or unrelated features. Do not claim that a proposed test has been executed.]
+
 
 For each significant candidate, copy this entry as needed:
-- Copilot test idea/candidate: [complete]
-- What it claims to verify: [complete]
-- Requirement trace: [complete]
-- Assertion quality: [complete]
-- Human critique: [complete]
-- Decision: [Accept / Modify / Reject]
-- Reason: [complete]
-- Final test reference if accepted/modified: [link or not retained]
-- Actual verification result: [complete; do not claim an unrun test passed]
+- Copilot test idea/candidate: [test_book_same_practitioner_conflict checking that booking D1 at 09:00 twice raises ValueError. Candidate 1]
+- What it claims to verify: [Verifies AC-04.1 conflict rejection.]
+- Requirement trace: [Traces directly to FR-05 / AC-04.1.]
+- Assertion quality: [Used pytest.raises(ValueError)]
+- Human critique: [Setup was slightly repetitive but the check was valid. Added post-block assertion confirming store was not corrupted.]
+- Decision: [Modify]
+- Reason: [Needed assertion that existing scheduled appointment was preserved in data store.]
+- Final test reference if accepted/modified: [tests/test_services.py::test_practitioner_conflict_same_time_rejected]
+- Actual verification result: [PASSED in full suite.]  
+
+- Copilot test idea/candidate: [test_book_different_practitioner_same_time checking that booking D2 at 09:00 succeeds when D1 is booked at 09:00. Candidate 2]
+- What it claims to verify: [Verifies AC-04.2 multi-practitioner concurrency.]
+- Requirement trace: [Traces directly to FR-05 / AC-04.2.]
+- Assertion quality: [Strong: asserts returned appointment practitioner is D2 and both bookings are in store.]
+- Human critique: [Well-structured; cleanly verifies that conflict is practitioner-specific.]
+- Decision: [Accept]
+- Reason: [Directly fulfills AC-04.2 without unnecessary errors or unstated rules.]
+- Final test reference if accepted/modified: [tests/test_services.py::test_practitioner_conflict_different_practitioner_allowed]
+- Actual verification result: [PASSED in full suite.] 
+
+- Copilot test idea/candidate: [test_practitioner_appointment_duration_overlap checking if booking at 09:15 conflicts with a 09:00 booking assuming a 30-minute duration. Candidate 3]
+- What it claims to verify: [Claims to check appointment duration overlap.]
+- Requirement trace: [None; violates SmartCare specification.]
+- Assertion quality: [Mistaken expectation.]
+- Human critique: [SmartCare baseline explicitly defines conflict as exact-time equality: "It is an exact-time rule, not an appointment-duration overlap calculation. No duration rules apply."]
+- Decision: [Reject]
+- Reason: [Invents an unstated business rule that contradicts the approved revision 2 requirements baseline.]
+- Final test reference if accepted/modified: [Not keep]
+- Actual verification result: [N/A]  
+
+- Copilot test idea/candidate: [test_rebook_after_cancellation_frees_slot verifying that cancelling an appointment allows the same practitioner to be booked at that time. Candidate 4]
+- What it claims to verify: [Verifies that conflict logic ignores non-SCHEDULED appointments.]
+- Requirement trace: [Connects FR-05 and FR-06/FR-07.]
+- Assertion quality: [Strong: asserts both cancelled and new scheduled appointments coexist in store.]
+- Human critique: [Essential boundary check demonstrating integration between cancellation status and conflict query.]
+- Decision: [Accept]
+- Reason: [Validates that cancellation frees schedule slot while retaining session history.]
+- Final test reference if accepted/modified: [tests/test_services.py::test_cancellation_frees_slot_and_keeps_history]
+- Actual verification result: [PASSED in full suite.]  
+
+
 
 Before accepting: traces to a requirement/criterion; can fail for the right reason; assertion checks required behaviour; no invented business rule; no unnecessary private implementation dependence. Reject/modify weak assertions, invented requirements, excessive mocking, duplicates, wrong exceptions, obsolete architecture and unnecessary dependencies.
 
 ## I Weak Copilot Test Reflection
 
-Which Copilot-generated test looked convincing but was weak? [response]
+Which Copilot-generated test looked convincing but was weak? []
 Why was it weak? [response]
 How did you strengthen it? [response]
 Accepted / modified / rejected test decisions and evidence: [link actual decisions in H]
