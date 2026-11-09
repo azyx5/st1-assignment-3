@@ -122,6 +122,70 @@ def test_find_unknown_practitioner_raises_lookup_error() -> None:
         session.practitioner_service.find_practitioner('D2')
     assert session.store.find_practitioner('D2') is None
 
+
+#FR 04 Book appointment
+
+def test_book_appointment_stores_and_links_objects() -> None:
+    """Booking an appointment should store it and link to patient and practitioner."""
+    session = setup_session()
+    found = session.appointment_service.find_appointment('A1')
+    store = SmartCareDataStore()
+    patients = store.list_patients()
+    practitioners = store.list_practitioners()
+    appointments = store.list_appointments()
+    patient = patients.register_patient('P1', 'Alex Fox')
+    practitioner = practitioners.register_practitioner('D1', 'Ben Taylor', 'General')
+    booking = appointments.book_appointment('A1', 'P1', 'D1', WHEN)
+    assert booking.appointment_id == 'A1'
+    assert booking.patient is patient
+    assert booking.practitioner is practitioner
+    assert booking.date_time == WHEN
+    assert found is session.appointment
+    assert booking.status == AppointmentStatus.SCHEDULED
+    assert found.date_time == WHEN
+
+def test_book_appointment_unknown_patient_or_practitioner_raises_lookup_error() -> None:
+    """Booking an appointment with unknown patient or practitioner IDs must raise LookupError."""
+    session = setup_session()
+    with pytest.raises(LookupError):
+        session.appointment_service.book_appointment('A2', 'P2', 'D1', WHEN)
+    with pytest.raises(LookupError):
+        session.appointment_service.book_appointment('A3', 'P1', 'D2', WHEN)
+
+def test_book_appointment_duplicate_id_raises_value_error() -> None:
+    """Booking an appointment with a duplicate ID must raise ValueError."""
+    session = setup_session()
+    with pytest.raises(ValueError):
+        session.appointment_service.book_appointment('A1', 'P1', 'D1', WHEN)
+
+
+## FR05 conflict detection
+def test_book_appointment_conflict_detection() -> None:
+    """Booking an appointment with a conflicting time must raise ValueError."""
+    session = setup_session()
+    with pytest.raises(ValueError):
+        session.appointment_service.book_appointment('A2', 'P1', 'D1', WHEN)
+    assert session.store.list_appointments() == [session.appointment]
+
+def test_book_appointment_conflict_detection_different_patient_or_practitioner() -> None:
+    """Booking an appointment with a different patient or practitioner at the same time is allowed."""
+    session = setup_session()
+    # Different patient, same practitioner
+    appointment2 = session.appointment_service.book_appointment('A2', 'P2', 'D1', WHEN)
+    assert appointment2.appointment_id == 'A2'
+    assert appointment2.patient.patient_id == 'P2'
+    assert appointment2.practitioner.practitioner_id == 'D1'
+    assert appointment2.date_time == WHEN
+    assert appointment2.status == AppointmentStatus.SCHEDULED
+
+    # Different practitioner, same patient
+    appointment3 = session.appointment_service.book_appointment('A3', 'P1', 'D2', WHEN)
+    assert appointment3.appointment_id == 'A3'
+    assert appointment3.patient.patient_id == 'P1'
+    assert appointment3.practitioner.practitioner_id == 'D2'
+    assert appointment3.date_time == WHEN
+    assert appointment3.status == AppointmentStatus.SCHEDULED
+
 # FR06-FR07 Appointment Lookup/retained history & Cancellation
 def test_cancel_appointment_returns_cancelled_object() -> None:
     """Cancel should return the original appointment object in the cancelled state."""
@@ -129,7 +193,6 @@ def test_cancel_appointment_returns_cancelled_object() -> None:
     cancelled = session.appointment_service.cancel_appointment('A1')
     assert cancelled is session.appointment
     assert cancelled.status is AppointmentStatus.CANCELLED
-
 
 def test_cancelled_appointment_remains_in_store_and_can_be_retrieved() -> None:
     """Cancelled appointments must remain stored and retrievable."""
