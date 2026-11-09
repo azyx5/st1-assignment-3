@@ -101,7 +101,7 @@ def test_appointment_rejects_invalid_fields() -> None:
     with pytest.raises(ValueError):
         Appointment('A1', patient, practitioner, WHEN, 'scheduled')
 
-
+# Datetime validation tests
 def test_validate_date_time_requires_naive_minute_precision_datetime() -> None:
     assert validate_date_time(WHEN) == WHEN
     invalid_values = [
@@ -115,7 +115,7 @@ def test_validate_date_time_requires_naive_minute_precision_datetime() -> None:
         with pytest.raises(ValueError):
             validate_date_time(value)
 
-
+# Cancellation Domain transition tests
 def test_cancelling_scheduled_appointment_changes_status() -> None:
     appointment = make_appointment()
     assert appointment.cancel() is None
