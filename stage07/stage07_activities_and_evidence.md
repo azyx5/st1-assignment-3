@@ -72,9 +72,46 @@ Assign TEST IDs before implementation or generation. Use canonical AC IDs with t
 
 | Requirement | Acceptance criterion | Test ID | Test type | Test name / location | Expected behaviour | Result / observed status | Supplied or student-authored |
 |---|---|---|---|---|---|---|---|
-| [complete] | [complete] | [complete] | [complete] | [complete] | [complete] | [complete] | [complete] |
+| FR-01	AC-01.1	TEST-POSSRV-01	Positive Service	test_services.py:test_register_patient_stores_and_returns_patient	Valid patient data with unused ID is stored and returned	PASSED	Student-authored
+FR-01	AC-01.2	TEST-NEGSRV-02	Negative Service	test_services.py:test_register_patient_duplicate_id_preserves_original	Existing patient ID raises ValueError, leaves original intact	PASSED	Student-authored
+FR-01	Validation Contract	TEST-POSDOM-01	Positive Domain	test_domain.py:test_domain_patient_valid_construction	Valid construction trims whitespace, exposes read-only ID	PASSED	Student-authored
+FR-01	Validation Contract	TEST-BOUDOM-02	Boundary Domain	test_domain.py:test_domain_patient_blank_id_rejected	Blank or non-string patient ID raises ValueError	PASSED	Student-authored
+FR-01	Validation Contract	TEST-BOUDOM-03	Boundary Domain	test_domain.py:test_domain_patient_blank_name_rejected	Blank or non-string patient name raises ValueError	PASSED	Student-authored
+FR-02	AC-02.1	TEST-POSSRV-03	Positive Service	test_services.py:test_find_patient_returns_registered_object	Known patient ID returns registered object	PASSED	Student-authored
+FR-02	AC-02.2	TEST-NEGSRV-06	Negative Service	test_services.py:test_find_unknown_patient_raises_lookup_error	Unknown patient ID raises LookupError, adds nothing	PASSED	Student-authored
+FR-02	Validation Contract	TEST-BOUSRV-04	Boundary Service	test_services.py:test_find_patient_trims_id	Whitespace around ID is trimmed before lookup	PASSED	Student-authored
+FR-02	Validation Contract	TEST-BOUSRV-05	Boundary Service	test_services.py:test_find_patient_is_case_sensitive	Differing case IDs raise LookupError	PASSED	Student-authored
+FR-02	Validation Contract	TEST-BOUSRV-07	Boundary Service	test_services.py:test_find_patient_invalid_id_raises_value_error	Blank or non-string ID raises ValueError	PASSED	Student-authored
+FR-03	Registration Contract	TEST-POSNEGSRV-08	Positive/Neg Service	test_services.py:test_register_practitioner_stores_and_duplicate_preserves_original	Practitioner stored; duplicate ID raises ValueError	PASSED	Student-authored
+FR-03	Supporting Lookup	TEST-POSSRV-09	Positive Service	test_services.py:test_find_practitioner_returns_registered_object	Known practitioner ID returns registered object	PASSED	Student-authored
+FR-03	Supporting Lookup	TEST-NEGSRV-12	Negative Service	test_services.py:test_find_unknown_practitioner_raises_lookup_error	Unknown practitioner ID raises LookupError	PASSED	Student-authored
+FR-03	Validation Contract	TEST-DOM-04	Positive Domain	test_domain.py:test_domain_practitioner_valid_construction	Practitioner trims fields, stores name/specialty	PASSED	Student-authored
+FR-03	Validation Contract	TEST-BOUDOM-05	Boundary Domain	test_domain.py:test_domain_practitioner_blank_fields_rejected	Blank/non-string ID/name/specialty raises ValueError	PASSED	Student-authored
+FR-04	AC-03.1	TEST-POSSRV-14	Positive Service	test_services.py:test_book_appointment_stores_and_links_participants	Registered participants + unique ID produce stored SCHEDULED appointment	PASSED	Student-authored
+FR-04	AC-03.2	TEST-NEGSRV-15	Negative Service	test_services.py:test_book_appointment_unknown_participants_rejected	Unknown patient or practitioner raises LookupError	PASSED	Student-authored
+FR-04	Invariant Contract	TEST-NEGSRV-16	Negative Service	test_services.py:test_book_appointment_duplicate_id_preserves_original	Duplicate appointment ID raises ValueError	PASSED	Student-authored
+FR-04	Invariant Contract	TEST-POSDOM-06	Positive Domain	test_domain.py:test_domain_appointment_initial_status_is_scheduled	New appointment starts in SCHEDULED status	PASSED	Student-authored
+FR-04	Invariant Contract	TEST-POSDOM-07	Positive Domain	test_domain.py:test_domain_appointment_valid_construction_and_properties	Appointment connects participant objects & naive datetime	PASSED	Student-authored
+FR-04	Invariant Contract	TEST-BOUDOM-08	Boundary Domain	test_domain.py:test_domain_appointment_invalid_participants_rejected	Non-Patient or non-Practitioner raises ValueError	PASSED	Student-authored
+FR-04	Invariant Contract	TEST-BOUDOM-09	Boundary Domain	test_domain.py:test_domain_appointment_invalid_status_rejected	Non-AppointmentStatus raises ValueError	PASSED	Student-authored
+FR-04	Invariant Contract	TEST-BOUDOM-10	Boundary Domain	test_domain.py:test_domain_appointment_datetime_boundaries_rejected	Non-zero sec/usec, tz-aware, non-datetime raises ValueError	PASSED	Student-authored
+FR-05	AC-04.1	TEST-NEGSRV-17	Negative Service	test_services.py:test_practitioner_conflict_same_time_rejected	Same practitioner/exact time/SCHEDULED raises ValueError	PASSED	Student-authored
+FR-05	AC-04.2	TEST-POSSRV-18	Positive Service	test_services.py:test_practitioner_conflict_different_practitioner_allowed	Different practitioner at same time is permitted	PASSED	Student-authored
+FR-05/06	Slot Re-use Contract	TEST-SRV-27	Positive Service	test_services.py:test_cancellation_frees_slot_and_keeps_history	Cancelled appointment frees timeslot for new booking	PASSED	Student-authored
+FR-06	AC-05.1	TEST-POSSRV-19	Positive Service	test_services.py:test_cancel_returns_same_object_with_cancelled_status	Cancel changes status to CANCELLED, returns same object	PASSED	Student-authored
+FR-06	AC-05.1	TEST-POSDOM-11	Positive Domain	test_domain.py:test_domain_appointment_cancel_changes_status	Domain cancel() changes status to CANCELLED	PASSED	Student-authored
+FR-06	AC-05.3	TEST-NEGSRV-22	Negative Service	test_services.py:test_repeated_cancellation_rejected_without_change	Repeated cancellation raises ValueError; status stays CANCELLED	PASSED	Student-authored
+FR-06	AC-05.3	TEST-NEGDOM-12	Negative Domain	test_domain.py:test_domain_appointment_repeated_cancellation_rejected	Domain cancel() on CANCELLED raises ValueError	PASSED	Student-authored
+FR-06	State Guard Contract	TEST-NEGSRV-23	Negative Service	test_services.py:test_cancel_completed_appointment_rejected_without_change	Cancelling COMPLETED appointment raises ValueError	PASSED	Student-authored
+FR-06	State Guard Contract	TEST-NEGDOM-13	Negative Domain	test_domain.py:test_domain_appointment_cancel_completed_rejected	Domain cancel() on COMPLETED raises ValueError	PASSED	Student-authored
+FR-06	Lookup Contract	TEST-NEGSRV-24	Negative Service	test_services.py:test_cancel_unknown_appointment_raises_lookup_error	Unknown appointment ID raises LookupError	PASSED	Student-authored
+FR-06	Validation Contract	TEST-BOUSRV-26	Boundary Service	test_services.py:test_cancel_invalid_id_raises_value_error	Blank or non-text appointment ID raises ValueError	PASSED	Student-authored
+FR-07	AC-05.2	TEST-POSSRV-20	Positive Service	test_services.py:test_cancelled_appointment_is_retained_and_retrievable	Cancelled appointment remains retrievable in session	PASSED	Student-authored
+FR-08	AC-06.1	TEST-POSSRV-28	Positive Service	test_services.py:test_find_appointment_success_and_unknown_raises_lookup	Known appointment ID returns appointment; unknown raises LookupError	PASSED	Supplied
+|
 
 ## C Test Design
+# **Section C is a redundant of section B
 
 Use descriptive test names such as test_cancel_changes_status() or test_blank_patient_id_is_rejected(). Explain what new evidence each case adds.
 
@@ -88,7 +125,7 @@ Arrange test data; act on one meaningful behaviour; assert the required observab
 
 | Test ID | Arrange | Act | Assert | Why meaningful / why assertion proves criterion |
 |---|---|---|---|---|
-| [complete] | [complete] | [complete] | [complete] | [complete] |
+| [TEST-BOUDOM-02] | [Prepare invalid patient IDs ('', '   ', None, 123)] | [Patient(bad_id, 'Alex Fox')] | [with pytest.raises(ValueError):] | [Proves domain entity rejects malformed IDs before instantiation.] |
 
 ## E Domain Test Evidence
 
@@ -96,7 +133,18 @@ Cover Patient/Practitioner construction and validation; Appointment construction
 
 | Test ID | Behaviour | Test file/function | Result |
 |---|---|---|---|
-| [complete] | [complete] | [complete] | [complete] |
+| TEST-DOM-01	Patient trims whitespace and exposes fields	tests/test_domain.py::test_domain_patient_valid_construction	PASSED
+TEST-DOM-02	Blank/invalid patient ID rejected	tests/test_domain.py::test_domain_patient_blank_id_rejected	PASSED
+TEST-DOM-03	Blank/invalid patient name rejected	tests/test_domain.py::test_domain_patient_blank_name_rejected	PASSED
+TEST-DOM-04	Practitioner trims whitespace and exposes attributes	tests/test_domain.py::test_domain_practitioner_valid_construction	PASSED
+TEST-DOM-05	Blank/invalid practitioner fields rejected	tests/test_domain.py::test_domain_practitioner_blank_fields_rejected	PASSED
+TEST-DOM-06	Appointment starts SCHEDULED	tests/test_domain.py::test_domain_appointment_initial_status_is_scheduled	PASSED
+TEST-DOM-07	Non-Patient or non-Practitioner objects rejected	tests/test_domain.py::test_domain_appointment_invalid_participants_rejected	PASSED
+TEST-DOM-08	Invalid appointment status type rejected	tests/test_domain.py::test_domain_appointment_invalid_status_rejected	PASSED
+TEST-DOM-09	Datetime validation boundaries rejected	tests/test_domain.py::test_domain_appointment_datetime_boundaries_rejected	PASSED
+TEST-DOM-10	Domain cancel() changes status	tests/test_domain.py::test_domain_appointment_cancel_changes_status	PASSED
+TEST-DOM-11	Repeated cancellation rejected	tests/test_domain.py::test_domain_appointment_repeated_cancellation_rejected	PASSED
+TEST-DOM-12	Cancellation of COMPLETED appointment rejected	tests/test_domain.py::test_domain_appointment_cancel_completed_rejected	PASSED |
 
 ## F Service Test Evidence
 
