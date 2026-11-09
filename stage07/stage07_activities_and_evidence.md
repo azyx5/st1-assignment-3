@@ -246,10 +246,14 @@ Before accepting: traces to a requirement/criterion; can fail for the right reas
 
 ## I Weak Copilot Test Reflection
 
-Which Copilot-generated test looked convincing but was weak? []
-Why was it weak? [response]
-How did you strengthen it? [response]
+Which Copilot-generated test looked convincing but was weak? [Candidate 3]
+Why was it weak? [commercial scheduling, appointmenmts, overlap calculations. Accepting this candidate would have tested and invented into requirements and failed.  ]
+How did you strengthen it? [strenghtened our boundary testing around the actual contracts]
 Accepted / modified / rejected test decisions and evidence: [link actual decisions in H]
+c1 modified 
+c2 accepted
+c3 rejected
+c4 accepted
 
 ## J Regression Run
 
@@ -257,7 +261,11 @@ Run python -m pytest from project/. Retain all accumulated tests. Record the tes
 
 | Command | Working directory | Code SHA | Passed | Failed | Failure summary | Product defect / test defect / unresolved | Evidence and interpretation |
 |---|---|---|---|---|---|---|---|
-| [complete] | [complete] | [complete] | [complete] | [complete] | [complete] | [complete] | [complete] |
+| [python3 -m pytest] | [project] | [] | [PASSED] | [complete] | [complete] | [complete] | [complete] |
+
+python3 -m pytest tests/test_services.py -q PASSES
+python3 -m pytest tests/test_starter.py -q PASSES
+python3 -m pytest tests/test_domain.py -q PASSES
 
 Individual test runs and changed-order independence evidence: [commands, results, links]
 Optional tutor-led demonstration notes: [optional; leave blank if not used]
@@ -266,10 +274,11 @@ Requirement → test → failure/observation → diagnosis → change → verifi
 
 ## K What the Suite Still Does Not Prove
 
-What does your test suite still not prove? [response]
-Coverage if used: [result or not used]
-Which uncovered areas matter, and why does coverage percentage alone not establish correctness? [response]
-Optional fixtures/parametrisation used and why, if any: [response or not used]
+What does your test suite still not prove? 
+Does not prove persistent accross application restart
+Coverage if used: it is approximately 100% accross all suites
+Which uncovered areas matter, and why does coverage percentage alone not establish correctness? []
+Optional fixtures/parametrisation used and why, if any: []
 
 ## L Git and Review Evidence
 
@@ -277,7 +286,7 @@ Use links rather than copying GitHub history. Continue the Stage 6 workflow; no 
 
 | Issue/task | Branch | PR | Reviewer | Key feedback | Outcome |
 |---|---|---|---|---|---|
-| [complete] | [complete] | [complete] | [complete] | [complete] | [complete] |
+| [DOMAIN AND SERVICE TESTING] | [complete] | [complete] | [JASPREET, SHAHDEEN] | [N/A] | [add a test_domain.py found it works fully, extended test_services.py and tested and passed] |
 
 ## M Contribution Evidence
 
@@ -285,45 +294,47 @@ Record actual work in test design, implementation, review, traceability, diagnos
 
 | Member | Actual contribution | Evidence link |
 |---|---|---|
-| [complete] | [complete] | [complete] |
+| [Rashid] | [test_domain.py, test_services.py, some of stage 7 md] | [all throughout] |
+| [Jaspreet] | [reviewed code, edited some, half of stage 7 md] | [all throughout] |
+| [Shahdeen] | [Stage 7 md file, reviewed code, fixed up some issues, discussed over call] | [all throughout] |
 
 ## N Formative Questions
 
 1. What question does verification answer?
-[response]
+[the question is, if we are building the project in the right way? It examines if we are following the perfect requiremmnets as asked in the project.]
 
 2. What question does validation answer?
-[response]
+[if we are building the right project or not? it evaluates if the product satisfies the actual needs of the users.]
 
 3. What is a unit test?
-[response]
+[a unit test is the individual test of a specific part of the code.]
 
 4. What is a pytest fixture?
-[response]
+[a helper function @, providing repeatable and modular scope in a setup of a code piece, with objects and data to test functions seperately]
 
 5. What is parametrisation in pytest?
-[response]
+[@pytest.mark.parametrize is a pytest mechanism excecuting test logic accross various inputs for expected outputs, so making a test case sepearte.]
 
 6. What is regression testing?
-[response]
+[re-excecuting a accumulated test suites, bug fixers/new feature additions]
 
 7. What does code coverage tell us, and what does it not prove?
-[response]
+[it identifies the excecuted lines and verified tests.]
 
 8. What makes an assertion weak?
-[response]
+[when it fails to verify the scific behaviour or allows wrong outputs to pass]
 
 9. What is the appropriate role of GitHub Copilot as a test assistant?
-[response]
+[brainstormer for candidate test, edge cases, test templates. Cannot replaxce human judgement.]
 
 10. What is the Stage 7 engineering rule?
-[response]
+[test are importamnt to gather traceable evidence. ]
 
 ## O Stage Completion
 
 Tested Stage 7 main SHA: [complete]
-Full-suite result: [complete]
+Full-suite result: [ALL PASSED: test_services.py PASSED, test_domain.py PASSED, test_starter.py PASSED]
 Unresolved defects and effect on baseline: [complete or none]
-Clean working tree and integration evidence: [complete]
+Clean working tree and integration evidence: [proven]
 Stage 8 handover status: [complete; no Stage 8 work assigned]
-All tutorial/formative responses and traceability/Copilot decisions complete: [confirm]
+All tutorial/formative responses and traceability/Copilot decisions complete: [done]
