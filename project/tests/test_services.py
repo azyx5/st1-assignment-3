@@ -127,22 +127,24 @@ def test_find_unknown_practitioner_raises_lookup_error() -> None:
 
 def test_book_appointment_stores_and_links_objects() -> None:
     """Booking an appointment should store it and link to patient and practitioner."""
-    session = setup_session()
-    found = session.appointment_service.find_appointment('A1')
     store = SmartCareDataStore()
-    patients = store.list_patients()
-    practitioners = store.list_practitioners()
-    appointments = store.list_appointments()
-    patient = patients.register_patient('P1', 'Alex Fox')
-    practitioner = practitioners.register_practitioner('D1', 'Ben Taylor', 'General')
-    booking = appointments.book_appointment('A1', 'P1', 'D1', WHEN)
+    patient_service = PatientService(store)
+    practitioner_service = PractitionerService(store)
+    appointment_service = AppointmentService(store)
+    patient = patient_service.register_patient('P1', 'Alex Fox')
+    practitioner = practitioner_service.register_practitioner(
+        'D1',
+        'Ben Taylor',
+        'General',
+    )
+    booking = appointment_service.book_appointment('A1', 'P1', 'D1', WHEN)
     assert booking.appointment_id == 'A1'
     assert booking.patient is patient
     assert booking.practitioner is practitioner
     assert booking.date_time == WHEN
-    assert found is session.appointment
     assert booking.status == AppointmentStatus.SCHEDULED
-    assert found.date_time == WHEN
+    assert store.find_appointment('A1') is booking
+    assert store.list_appointments() == [booking]
 
 def test_book_appointment_unknown_patient_or_practitioner_raises_lookup_error() -> None:
     """Booking an appointment with unknown patient or practitioner IDs must raise LookupError."""
@@ -168,23 +170,29 @@ def test_book_appointment_conflict_detection() -> None:
     assert session.store.list_appointments() == [session.appointment]
 
 def test_book_appointment_conflict_detection_different_patient_or_practitioner() -> None:
-    """Booking an appointment with a different patient or practitioner at the same time is allowed."""
+    """Same practitioner conflicts regardless of patient; another practitioner is available."""
     session = setup_session()
-    # Different patient, same practitioner
-    appointment2 = session.appointment_service.book_appointment('A2', 'P2', 'D1', WHEN)
-    assert appointment2.appointment_id == 'A2'
-    assert appointment2.patient.patient_id == 'P2'
-    assert appointment2.practitioner.practitioner_id == 'D1'
-    assert appointment2.date_time == WHEN
-    assert appointment2.status == AppointmentStatus.SCHEDULED
+    session.patient_service.register_patient('P2', 'Morgan Example')
+    session.practitioner_service.register_practitioner(
+        'D2',
+        'Taylor Example',
+        'General',
+    )
 
-    # Different practitioner, same patient
-    appointment3 = session.appointment_service.book_appointment('A3', 'P1', 'D2', WHEN)
-    assert appointment3.appointment_id == 'A3'
-    assert appointment3.patient.patient_id == 'P1'
-    assert appointment3.practitioner.practitioner_id == 'D2'
-    assert appointment3.date_time == WHEN
-    assert appointment3.status == AppointmentStatus.SCHEDULED
+    with pytest.raises(ValueError):
+        session.appointment_service.book_appointment('A2', 'P2', 'D1', WHEN)
+
+    appointment = session.appointment_service.book_appointment(
+        'A3',
+        'P1',
+        'D2',
+        WHEN,
+    )
+    assert appointment.appointment_id == 'A3'
+    assert appointment.patient is session.patient
+    assert appointment.practitioner.practitioner_id == 'D2'
+    assert appointment.date_time == WHEN
+    assert appointment.status is AppointmentStatus.SCHEDULED
 
 # FR06-FR07 Appointment Lookup/retained history & Cancellation
 def test_cancel_appointment_returns_cancelled_object() -> None:
