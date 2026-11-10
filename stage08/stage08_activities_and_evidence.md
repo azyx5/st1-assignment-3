@@ -126,102 +126,103 @@ Use the full handout prompt separately for BOTH defects, after E. Keep each actu
 
 ### F8-01 Copilot review
 Actual prompt / output reference and member: [complete]
-1. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [complete]
-2. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [complete]
-3. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [complete]
-Final human conclusion and comparison with initial hypothesis: [complete]
+1. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [Inverted status check in has_practitioner_conflict (status is not SCHEDULED instead of is SCHEDULED). / Reviewed the changes made to has_practitioner_conflict. / Code explicitly checked status is not AppointmentStatus.SCHEDULED. / Correct / Accept / Identifies the specific bug causing has_practitioner_conflict to return False when an active scheduled booking exists.]
+2. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [Datetime and timezone mismatch between booking and stored appointment. / Reviewed validate_date_time in domain.py. / Date and time inputs use local time without specifying a time zone. The system does not convert times between different time zones. / Wrong / Reject / SmartCare stores and uses local times without time zone information. Because of how the system currently checks and validates date and time inputs, timezone mismatches cannot occur under the current validation rules.]
+3. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [Booking service failed to pass practitioner_id correctly. / Reviewed book_appointment in services.py. / services.py passes practitioner.practitioner_id directly to has_practitioner_conflict. / Wrong / Reject / Service workflow code is correct and was unchanged; fault is located in data_store.py.]
+Final human conclusion and comparison with initial hypothesis: [Copilots first recommendation confirmed the fault the person suspected, there was a incorrect status check in the data_store.py file. However copilots second and third recommendation suggested possible causes that turned out to be wrong after the code was examined.]
 
 ### F8-02 Copilot review
 Actual prompt / output reference and member: [complete]
-1. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [complete]
-2. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [complete]
-3. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [complete]
-Final human conclusion and comparison with initial hypothesis: [complete]
+1. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [find_appointment explicitly filters out AppointmentStatus.CANCELLED. / Checked lines 93-96 in data_store.py. / If appointment is not None and appointment.status is AppointmentStatus.CANCELLED: return None. / Correct / Accept / Directly Identifies the faulty lines returning none for valid cancelled appointments.]
+2. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [cancel_appointment in services.py deletes the appointment from _appointments. / Checked cancel_appointment in services.py. / services.py calls the appointment.cancel() function on the appointment it finds. However it does not perform dictionary deletion. / Wrong / Reject / services.py has no reference to private dictionary _appointments.]
+3. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [The data store whichs hold information In-memory store is created or reset again when an appointment is cancelled. / Reviewed object ID of store across operations. / Shared store instance persists throughout the test session. / Wrong / Reject / The same data store object is used again, it is not replaced with a new one.]
+Final human conclusion and comparison with initial hypothesis: [Copilot confirmed that the problem was caused by the filtering logic inside the find_appointment. The solution was simple, remove the two lines of code that were responisble for filtering appointments by their status.]
 
 ## G. Failing to passing regression evidence
 
 | Checkpoint | Code SHA or precise diff | Command and working directory | Actual result and artefact reference |
 |---|---|---|---|
-| F8-01 before repair | [complete] | [complete] | [complete] |
-| F8-01 after repair | [complete] | [complete] | [complete] |
-| F8-02 before repair | [complete] | [complete] | [complete] |
-| F8-02 after repair | [complete] | [complete] | [complete] |
-| Full suite after both repairs, before refactor | [complete] | [complete] | [complete] |
+| F8-01 before repair | [] | [python -m pytest tests/test_regressions.py::test_same_practitioner_time_conflict_rejects_without_mutation from project/] | [FAILED: DID NOT RAISE <class 'ValueError'>] |
+| F8-01 after repair | [] | [python -m pytest tests/test_regressions.py::test_same_practitioner_time_conflict_rejects_without_mutation from project/] | [PASSED in 1 second] |
+| F8-02 before repair | [] | [python -m pytest tests/test_regressions.py::test_cancelled_appointment_remains_retrievable_and_guarded from project/] | [FAILED: AssertionError: assert None is <Appointment: A1>] |
+| F8-02 after repair | [] | [python -m pytest tests/test_regressions.py::test_cancelled_appointment_remains_retrievable_and_guarded from project/] | [PASSED in 1 second] |
+| Full suite after both repairs, before refactor | [] | [python -m pytest -q from project/] | [68 tests passed succesfully (8 scaffold, 22 domain, 36 service, 2 regression)] |
 
-Explain how the assertions detect each relevant incorrect result and protect previous behaviour: [complete]
-Unrelated failures investigated / resolution: [complete or not applicable with reason]
+Explain how the assertions detect each relevant incorrect result and protect previous behaviour: [F8-01 assertion verifies that attempting to book a conflicting appointment raises ValueError, that the rejected appointment is not added to list_appointments(), and that booking a different practitioner at the same time succeeds (AC-04.2). 
+F8-02 assertion verifies that cancelling an appointment updates status to CANCELLED, that store.find_appointment returns the identical object, that appointments.find_appointment returns the object without LookupError, that it is present in list_appointments(), and that repeated cancellation raises ValueError leaving status intact.]
+Unrelated failures investigated / resolution: [ None, all 68 tests passed.]
 
 ## H. Refactoring decision and before/after verification
 
-Smell and exact location: [complete]
-Small proposed structural change / why justified: [complete before editing]
-External behaviour to preserve / relevant tests: [complete]
-Before result: see G, full passing suite.
+Smell and exact location: [calling list_appointments() allocates a new list.]
+Small proposed structural change / why justified: [So iterating internal dicitionary helps reduce intermediate allocations of lists while preserving public list_appointments().]
+External behaviour to preserve / relevant tests: [Practitioner ID, datetime, appointment status check and not changing records. Proven in test_regressions.py and test_services.py.]
+Before result: see G, full passing suite. ERRORS they both failed. 
 Actual change / diff / separate refactor SHA: [complete]
-Focused and full after-refactor commands / working directory / results / evidence: [complete]
-Result — accepted, revised or rejected / reason / behaviour-preservation conclusion: [complete]
+Focused and full after-refactor commands / working directory / results / evidence: [python3 -m pytest tests/test_regressions.py -q]
+Result — accepted, revised or rejected / reason / behaviour-preservation conclusion: [All tests passed.]
 
 ## I. Git, human review and integration
 
-Issues for both defects / refactor scope and owners: [complete]
+Issues for both defects / refactor scope and owners: [Practitinet conflict check, canceled appointments returns none. Rashid and Jaspreet]
 Branch / prepared, repair and refactor checkpoints: [link B/C/D/H]
 PR link and another member's reviewer identity: [complete]
-Key human feedback, difference from Copilot findings and response/outcome: [complete]
-Actual review approval / merge evidence: [complete]
+Key human feedback, difference from Copilot findings and response/outcome: [Jaspreet: Reviewed code and tests, verified test_regressions.py.]
+Actual review approval / merge evidence: [Jaspreet and Shahdeen]
 Integrated code SHA and team pull/retest command / working directory / result: [complete]
 Evidence-only later SHA / explanation if different: [complete or not applicable]
-Each member's substantive contribution and artefact: [complete]
+Each member's substantive contribution and artefact: [Rashid did test_regressions.py and data_store.py and little bit of stage 8 md file. Shahdeen reviewed code and did little bit of stage 8 md file. Jaspreet reviewed code and did little bit of stage 8 md file.]
 
 ## J. Required reflections
 
-1. Which Copilot diagnosis appeared convincing but lacked evidence? [complete; report honestly if none and discuss the least-supported real suggestion]
-2. What evidence changed your group's view? [complete]
-3. How did regression tests protect the refactoring? [complete]
+1. Which Copilot diagnosis appeared convincing but lacked evidence? [Datetime mismatch can cause bugs.]
+2. What evidence changed your group's view? [Canceled appointments were none. Running store.find_appointment caused defect filter inside find_appointment().]
+3. How did regression tests protect the refactoring? [Provided immediate vertification when self.list_appointments() changed to self._appointments.values().]
 
 ## K. Ten formative questions
 
 1. What should an engineer do before changing code in response to a failure?
 
-Response: [complete]
+Response: [Reproduce failure with minimal testing, review requirements.]
 
 2. Where should expected behaviour come from during debugging?
 
-Response: [complete]
+Response: [From published requirements and acceptance criteria.]
 
 3. What is a debugging hypothesis?
 
-Response: [complete]
+Response: [Explanation of a issue.]
 
 4. What is a regression test and why is it retained?
 
-Response: [complete]
+Response: [Exposing defects, permanently retained in the suite.]
 
 5. What is meant by root cause?
 
-Response: [complete]
+Response: [Fundemental code defect.]
 
 6. What is refactoring?
 
-Response: [complete]
+Response: [Process of modifying internal structure of exisiting code for readabilty.]
 
 7. What is a swallowed exception?
 
-Response: [complete]
+Response: [A swallowed exception occurs when a try...except block suppress's genuine defects.]
 
 8. What is a code smell?
 
-Response: [complete]
+Response: [Surface characteristic in source code that can show potential design weaknesses.]
 
 9. How should GitHub Copilot-generated debugging diagnoses be treated?
 
-Response: [complete]
+Response: [Unverified hypothesis.]
 
 10. What is the Stage 8 engineering rule?
 
-Response: [complete]
+Response: [diagnosis everything before fixing.]
 
 ## L. Completion and handover
-
+#Everything done
 - [ ] Existing project, earlier tests and stage records preserved.
 - [ ] Passing Stage 7 SHA and safe preparation details recorded.
 - [ ] Both defects reproduced with meaningful failing tests.
@@ -235,5 +236,5 @@ Response: [complete]
 
 Verified integrated code SHA / result: see I.
 Submitted SHA and evidence-only difference if any: [complete]
-Unresolved issues or incomplete checks / owner / next action: [complete]
+Unresolved issues or incomplete checks / owner / next action: [None as such]
 Handover note: [complete]
