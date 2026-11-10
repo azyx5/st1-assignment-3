@@ -80,4 +80,5 @@ def test_same_practitioner_time_conflict_rejects_without_affecting_existing_appo
 # Retained history and retrievability of cancelled appointments
 
 def test_cancelled_appointment_remains_retrievable_and_secure() -> None:
-    """"""
+    """regression test: cancelled appointments remain stored and retrievable"""
+
