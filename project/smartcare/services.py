@@ -10,6 +10,7 @@ from smartcare.domain import (
     Patient,
     Practitioner,
 )
+from smartcare.queries import select_appointments
 
 
 class PatientService:
@@ -172,8 +173,8 @@ class AppointmentService:
             raise LookupError('Practitioner not found')
         if status is not None and not isinstance(status, AppointmentStatus):
             raise ValueError('Invalid appointment status')
-        appointments = self.data_store.list_appointments_by_practitioner(
-            practitioner_id,
+        return select_appointments(
+            self.data_store.list_appointments(),
+            practitioner.practitioner_id,
             status,
         )
-        return sorted(appointments, key=lambda a: a.date_time)
