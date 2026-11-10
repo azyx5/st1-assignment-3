@@ -8,7 +8,7 @@ Baseline: Stage 6 foundation, 2026 revision 2. This starter deliberately leaves 
 - Group and tutorial: [Monday 9.30-11.30]
 - Member names, GitHub usernames and UG/PG cohorts: [Rashid, Jaspreet, Shahdeen]
 - Shared repository URL: [https://github.com/azyx5/st1-assignment-3]
-- Latest completed stage: [7]
+- Latest completed stage: [9]
 - Verified code SHA: [complete]
 - Test command, working directory and observed result: [all working]
 - Final submitted SHA, if different from tested code SHA: [complete; explain evidence-only changes]
