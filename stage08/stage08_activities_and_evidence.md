@@ -74,51 +74,51 @@ Traceback — exception/assertion; expected/observed values; test line; call pat
 ## B. Stage 7 baseline and safe preparation
 
 - Stage 7 code SHA and requirement baseline: [complete]
-- Baseline test command / working directory / observed result / evidence: [complete]
+- Baseline test command / working directory / observed result / evidence: [all tests are passing]
 - Clean preparation SHA if a record-only commit followed Stage 7: [complete]
-- Branch and preparer / how teammates obtained this branch: [complete]
+- Branch and preparer / how teammates obtained this branch: [one branch, all 3 members working together but one commit/push at a time each like one person modifies/changes/makes new files and works on it, pushes, then another does next activities.]
 - Downloaded tool version, source SHA256 and --check outcome: [complete]
 - --apply and --verify output summaries / artefact references: [complete]
 - Bounded diff inspected and recovery location (not committed): [complete]
 - Prepared faulty-state commit SHA: [complete]
-- Preparation or recovery issues and resolution, if any: [complete]
-- Initial prepared full-suite command / result / key failures: [complete]
+- Preparation or recovery issues and resolution, if any: [some]
+- Initial prepared full-suite command / result / key failures: [python3 -m pytest tests/test_regressions.py -q]
 
 ## C. F8-01 diagnosis and repair
 
-- Symptom / observed behaviour: [complete]
-- Expected behaviour and requirement: [complete]
-- Minimal synthetic reproduction steps: [complete]
-- Meaningful failing test path/name and exact relevant failure: [complete]
+- Symptom / observed behaviour: [same exact practitioner at same time raises a value error. So there is no double booking issues/conflicts]
+- Expected behaviour and requirement: [raises value error, keeping existing booking intact, however same time and different practitioner is allowed.]
+- Minimal synthetic reproduction steps: [mix and match]
+- Meaningful failing test path/name and exact relevant failure: [in tests_regressions.py]
 - Human hypothesis and intended checks: see E, F8-01.
-- Supported root cause and inspected code/runtime evidence: [complete after diagnosis]
-- Smallest justified fix / diff / why other behaviour is preserved: [complete]
-- Repair SHA / focused verification result: [complete]
+- Supported root cause and inspected code/runtime evidence: [everything runs]
+- Smallest justified fix / diff / why other behaviour is preserved: [versions pushed to github]
+- Repair SHA / focused verification result: [tests passed]
 
 ## D. F8-02 diagnosis and repair
 
-- Symptom / observed behaviour: [complete]
-- Expected behaviour and requirement: [complete]
-- Minimal synthetic reproduction steps: [complete]
-- Meaningful failing test path/name and exact relevant failure: [complete]
+- Symptom / observed behaviour: [cancelled appointment wouldve been returning none, fixed.]
+- Expected behaviour and requirement: [cancellation is status as cancelled while data is stored and retrievable through ID, find_appointment, list-appointment()]
+- Minimal synthetic reproduction steps: [check/refer to files.]
+- Meaningful failing test path/name and exact relevant failure: [refer to versions pushed on github]
 - Human hypothesis and intended checks: see E, F8-02.
-- Supported root cause and inspected code/runtime evidence: [complete after diagnosis]
-- Smallest justified fix / diff / why other behaviour is preserved: [complete]
-- Repair SHA / focused verification result: [complete]
+- Supported root cause and inspected code/runtime evidence: [filter in find_appointment]
+- Smallest justified fix / diff / why other behaviour is preserved: [fixed, refer to versions pushed to github]
+- Repair SHA / focused verification result: [Tests passed]
 
 ## E. Human-first hypotheses
 
 Complete both entries BEFORE Copilot. C/D supply observed/expected/reproduction/test; retain those initial facts and link them here.
 
 ### F8-01 human entry
-Likely cause and why plausible: [complete]
-Evidence intended to inspect / competing explanation / discriminating check: [complete]
-Member and saved sequence/time or commit showing this preceded consultation: [complete]
+Likely cause and why plausible: [conflicting times/attributes]
+Evidence intended to inspect / competing explanation / discriminating check: [fixing conflict issues, datetime/WHEN to differentiate, practitioner/patient IDs. and appointment IDs to differentiate]
+Member and saved sequence/time or commit showing this preceded consultation: [Jaspreet consulted]
 
 ### F8-02 human entry
-Likely cause and why plausible: [complete]
-Evidence intended to inspect / competing explanation / discriminating check: [complete]
-Member and saved sequence/time or commit showing this preceded consultation: [complete]
+Likely cause and why plausible: [find_appointment returning non at appointment.status cancelled. Shows cancelled appt, but returns none]
+Evidence intended to inspect / competing explanation / discriminating check: [inspected find_appointment, edited data_store.py]
+Member and saved sequence/time or commit showing this preceded consultation: [Shahdeen consultd]
 
 ## F. GitHub Copilot prompts, findings and human decisions
 
