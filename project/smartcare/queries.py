@@ -10,7 +10,9 @@ def appointment_sort_key(appointment: Appointment) -> tuple[datetime, str]:
     """Return the date/time and appointment ID ordering key without side
     effects.
     """
-    raise NotImplementedError('Stage 9: named sorting key')
+    return (appointment.date_time, appointment.appointment_id)
+
+
 
 
 def select_appointments(
@@ -24,4 +26,9 @@ def select_appointments(
     Order by date/time then appointment ID using appointment_sort_key.
     Do not mutate the source list/objects or perform input/output.
     """
-    raise NotImplementedError('Stage 9: pure query')
+    filtered_appointments = [
+        appointment for appointment in appointments
+        if appointment.practitioner_id == practitioner_id
+        and (status is None or appointment.status == status)
+    ]
+    return sorted(filtered_appointments, key=appointment_sort_key)
