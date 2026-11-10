@@ -173,7 +173,7 @@ Source ZIP name / SHA correspondence / extracted comparison: [Extracted]
 
 
 ## L Submission package verification
-
+# All done
 - [ ] Feature freeze and scoped requirements traced.
 - [ ] Applicable full regressions, integrated demo and invalid paths verified.
 - [ ] Architecture/code quality and final AI/dependency checks complete.
@@ -199,59 +199,59 @@ Remaining administration or release dependency: [None]
 
 ## M Formative questions
 
-1. What is a release candidate? [response]
+1. What is a release candidate? [software product build past the devolopment stage and testing]
 
-2. What is feature freeze and why is it used? [response]
+2. What is feature freeze and why is it used? [When no new additions or scopes are added]
 
-3. What is regression testing in a release context? [response]
+3. What is regression testing in a release context? [executing suites and tests, verifying things.]
 
-4. What is a known limitation? [response]
+4. What is a known limitation? [documented constraint in current stage of release]
 
-5. What is technical debt? [response]
+5. What is technical debt? [ongoing maintenance and checks]
 
-6. What are release notes? [response]
+6. What are release notes? [where the software product stands]
 
-7. What is software maintenance? [response]
+7. What is software maintenance? [corrective measures and keeping software safe from any bugs or internal malfunctions. ]
 
-8. What is the purpose of the individual demonstration/viva? [response]
+8. What is the purpose of the individual demonstration/viva? [eral evaluation for authorship, understanding and basic know-how that a student understands the work]
 
-9. What should the final responsible-AI check establish before release? [response]
+9. What should the final responsible-AI check establish before release? [that any and all parts were reviewed by humans.]
 
-10. What is the main course conclusion about AI and the role of the software engineer? [response]
+10. What is the main course conclusion about AI and the role of the software engineer? [ai tools can lack basic or advanced technical, design, and logic understanding which is why human review is always important to be in place.]
 
 
 ## N Reflection viva and handover
 
-Strongest evidence SmartCare is ready: [response]
-Weakest area: [response]
-How AI use changed from Stage 1 to Stage 12: [response]
-Start doing — engineering and AI use: [response]
-Stop doing — engineering and AI use: [response]
-Continue doing — engineering and AI use: [response]
-What worked / caused rework / future delivery improvement: [response]
-One paragraph — If AI can write code why do we still need software engineers: [response]
+Strongest evidence SmartCare is ready: [all 170 tests passing.]
+Weakest area: [session-only memory]
+How AI use changed from Stage 1 to Stage 12: [treated as a design reviewer and suggestion provided. in the later stage after 5, it was more about helping understand test issues and fixes.]
+Start doing — engineering and AI use: [proper planning, status classifications, boundaries, more code implementation]
+Stop doing — engineering and AI use: [repettitve tests, plausible ai code cannot be relied on heavily]
+Continue doing — engineering and AI use: [separation of concerns,, pure queries,, accurate documentation]
+What worked / caused rework / future delivery improvement: [straight-forward no-branching work coordination between all team mebers where we did not do branching, but rather edited files indiviually and pushed, then and only then did another person start working on something else. However it did become a problem. Implement branching, understand it properly so it isnt an excuse not to do. Makes working on a shared project more efficient.]
+One paragraph — If AI can write code why do we still need software engineers: [We humans can verify, make our code effiecnt, less duplicability, and more logic flow.]
 
 | Preparation item | Own explanation and evidence link |
 |---|---|
-| Problem and stakeholders | [response] |
-| Two requirements and acceptance criteria | [response] |
-| Domain model and architecture | [response] |
-| Design trade-off | [response] |
-| Meaningful test and its limits / 100 percent coverage | [response] |
-| Diagnosed defect and verification | [response] |
-| Shared store and session-state/query responsibilities | [response] |
-| What would break if session-state lookup/query responsibilities changed? | [response] |
-| Why cancellation is domain behaviour / conflict coordination is service behaviour | [response] |
-| FR-07 retained history test | [response] |
-| Actual AI change rejected/modified or honestly accepted with verification | [response] |
-| Unresolved limitation / future production work | [response] |
-| Personal implementation contribution | [response] |
-| Personal test/review/design/integration contribution | [response] |
+| Problem and stakeholders | [SmartCare, patients, practitioners, needed a stable appointment system.] |
+| Two requirements and acceptance criteria | [Practitioner conflict prevention, appiintment cannot be scheduled if a practtitioner already has one booked. Cancellation, proper status transitions] |
+| Domain model and architecture | [Patient,Practitioner, Appointment] |
+| Design trade-off | [select_appointments] |
+| Meaningful test and its limits / 100 percent coverage | [in test_services.py proving retention, retained history, and free slots] |
+| Diagnosed defect and verification | [defects, AppointmentStatus.Scheduled] |
+| Shared store and session-state/query responsibilities | [SmartCareDataStore holding internal dictionaries. list_appointments] |
+| What would break if session-state lookup/query responsibilities changed? | [pures would become impure] |
+| Why cancellation is domain behaviour / conflict coordination is service behaviour | [internal states changed by cancellation of an appointment so that becomes appointment.cancel()] |
+| FR-07 retained history test | [verified] |
+| Actual AI change rejected/modified or honestly accepted with verification | [we rejected the sqllite databsse suggestion] |
+| Unresolved limitation / future production work | [session-only storage limited to in memory storage in a specific session at a time] |
+| Personal implementation contribution | [all throughout, versions pushed to github by all team members and myself.] |
+| Personal test/review/design/integration contribution | [some pre/post, fixes, code implementation etc etc] |
 | PG agentic change and rescheduling verification | [response] |
 | PG responsible-AI risk/remediation or supported no finding | [response] |
 
 Optional bounded-change practice only: validation rule, focused test, safe error-message change, explicit-input query or agreed status rule with test. Explain expected impact before editing, make a small change, run the test, and identify evidence to inspect if unsure. No live AI unless explicitly permitted. Preserve the submitted candidate.
 
-Practice question/change and reasoning: [response or not undertaken]
-Separate reflection / peer / common team viva evidence links and routing: [response]
+Practice question/change and reasoning: [response or not undertaken] ??
+Separate reflection / peer / common team viva evidence links and routing: [group members will submit individual reflection on cadmus]
 No further coding stage. Later corrections use the published assessment process.
