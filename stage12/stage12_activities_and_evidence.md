@@ -10,7 +10,7 @@ Members and UG/PG applicability: [Rashid, Jaspreet, Shahdeem]
 
 Release label/version and requirements baseline: [SmartCare Assessment 3, all business rules, query rules,fp rules, ui rules implemented]
 Common starting SHA / branch / applicable members: [Rashid, Jaspreet, Shahdeen]
-PG starting SHA / branch / applicable members or not applicable: [response]
+PG starting SHA / branch / applicable members or not applicable: [N/A]
 Working-state review and approved integration: [response]
 Protected common candidate and PG differences: [response]
 Feature freeze / owner / verifier: [Rashid, Jaspreet, Shahdeen]
@@ -42,35 +42,35 @@ Tutorial activity 2 and actual readiness matrix. Add exact requirement/acceptanc
 
 | Suite/scope | Environment/version | Working directory and command | Tested SHA | Actual result | Evidence link |
 |---|---|---|---|---|---|
-| Complete common | [response] | [response] | [response] | [response] | [response] |
-| Complete PG if applicable | [response] | [response] | [response] | [response] | [response] |
-| Affected focused checks after correction | [response] | [response] | [response] | [response] | [response] |
-| Full integrated recheck | [response] | [response] | [response] | [response] | [response] |
-Prior assertions preserved / reviewed test diff: [response]
-Remaining failure / limitation: [response]
+| Complete common | [Python 3.14.3 / macOS / pytest-8.3.5] | [/project: python -m pytest -v] | [response] | [170 passed in 0.17s] | [project/tests/] |
+| Complete PG if applicable | [N/A] | [response] | [response] | [response] | [response] |
+| Affected focused checks after correction | [Python 3.14.3 / macOS / pytest-8.3.5] | [project] | [passed] | [test_regressions.py] | [tests/test_workflows.py, tests/test_queries.py] |
+| Full integrated recheck | [Python 3.14.3 / macOS / pytest-8.3.5] | [/project: python -m pytest -q] | [response] | [170 tests passed in 0.12 seconds] | [python -m pytest -v] |
+Prior assertions preserved / reviewed test diff: [all test passed]
+Remaining failure / limitation: [0 test failures]
 
 
 ## D Console and end to end demonstration
 
 | Demo step | Synthetic setup/input | Expected requirement | Observed result | Evidence/link |
 |---|---|---|---|---|
-| Problem and stakeholders | [response] | [response] | [response] | [response] |
-| Register and find Patient and two Practitioners | [response] | [response] | [response] | [response] |
-| Valid booking | [response] | [response] | [response] | [response] |
-| Same practitioner exact-time conflict rejected | [response] | [response] | [response] | [response] |
-| Different practitioner same time allowed | [response] | [response] | [response] | [response] |
-| Cancel SCHEDULED and retain/find CANCELLED object | [response] | [response] | [response] | [response] |
-| Invalid/repeated cancellation rejected | [response] | [response] | [response] | [response] |
-| Default all-status listing | [response] | [response] | [response] | [response] |
-| Explicit filtering / empty vs unknown / deterministic order | [response] | [response] | [response] | [response] |
-| Invalid date/status/menu/lookup recovery and continued operation | [response] | [response] | [response] | [response] |
-| Session-only limitation and normal exit | [response] | [response] | [response] | [response] |
-| One meaningful requirement-linked pytest test explained | [response] | [response] | [response] | [response] |
-| Architecture and one actual AI decision / known limitation | [response] | [response] | [response] | [response] |
+| Problem and stakeholders | [Outpatient healthcare clinic coordinator needs a simple system] | [Clinic coordinator requires easy handling and editition of the data] | [all requirements mentioned properly] | [all throughout] |
+| Register and find Patient and two Practitioners | [multiple options] | [valid enttities registered and retrievable] | [same as expectation] | [test_workflows.py ] |
+| Valid booking | [available] | [status Scheduled, linked to actual Patient and Practitioner] | [Appointment booked successfully.] | [console.py#run_menu] |
+| Same practitioner exact-time conflict rejected | [available] | [double booking rejection] | [Error: Practitioner already has a SCHEDULED appointment at this time. No partial record stored.] | [test_workflows.py] |
+| Different practitioner same time allowed | [available] | [same patient booked 2 practitioners] | [Appointment booked successfully] | [test_workflows.py] |
+| Cancel SCHEDULED and retain/find CANCELLED object | [available] | [status cancellation successful] | [Appointment cancelled successfully] | [console.py] |
+| Invalid/repeated cancellation rejected | [Programmatic & service verification: cancel A1 again] | [cancelled appointment cannot be cancelled] | [ValueError('Appointment already cancelled') raised] | [test_services.py::test_repeated_cancellation_rejected_without_change] |
+| Default all-status listing | [option available] | [returns all appointments] | [Displays A1 with status Cancelled] | [test_workflows.py] |
+| Explicit filtering / empty vs unknown / deterministic order | [multiple options available] | [filters out when there is no appointment] | [empty list handled cleanly] | [test_workflows.py] |
+| Invalid date/status/menu/lookup recovery and continued operation | [option available] | [catches errors when there is an error] | [Error: Use date/time format YYYY-MM-DD HH:MM] | [test_workflows.py] |
+| Session-only limitation and normal exit | [exit] | [clean terminal] | [Goodbye. Session data discarded.] | [console.py] |
+| One meaningful requirement-linked pytest test explained | [n/a] | [response] | [response] | [response] |
+| Architecture and one actual AI decision / known limitation | [Explain decoupling of pure queries from stateful repository; explain rejection of SQLite caching; state session-only scope] | [Separation of concerns: queries are pure functions; services coordinate store snapshots; presentation is headless; persistence rejected.] | [Architecture diagrams and Copilot audit log presented clearly to marker.] | [stage09/stage09_activities_and_evidence.md Section E] |
 | PG reschedule identity/participants/time and no-op | [response] | [response] | [response] | [response] |
 | PG conflict/invalid status/failure non-mutation | [response] | [response] | [response] | [response] |
 | PG old slot / current lookup/list ordering / assurance risks | [response] | [response] | [response] | [response] |
-Stable demo owner / fresh process / command: [response]
+Stable demo owner / fresh process / command: [Rashid]
 PG demonstrations through service/tests or not applicable: [response]
 
 
@@ -78,15 +78,15 @@ PG demonstrations through service/tests or not applicable: [response]
 
 | Review area | Code/evidence location | Finding or no finding | Correction/no change and recheck |
 |---|---|---|---|
-| OOP responsibilities and pure-query boundaries | [response] | [response] | [response] |
-| PascalCase and snake_case naming | [response] | [response] | [response] |
-| Useful type hints and meaningful docstrings | [response] | [response] | [response] |
-| Four-space indentation and imports/layout | [response] | [response] | [response] |
-| Focused methods / duplication / dead or commented code | [response] | [response] | [response] |
-| Globals / leakage / unnecessary inheritance or frameworks | [response] | [response] | [response] |
-| No SQLite/persistence/repository ABCs/speculative features | [response] | [response] | [response] |
-| Synthetic data / secrets / dependencies / provenance | [response] | [response] | [response] |
-| Significant common Copilot contributions and human verification | [response] | [response] | [response] |
+| OOP responsibilities and pure-query boundaries | [domain.py, data_store.py, services.py, queries.py, console.py] | [No finding] | [No change needed.] |
+| PascalCase and snake_case naming | [All files in project/smartcare/ and project/tests/] | [No finding.] | [no change needed] |
+| Useful type hints and meaningful docstrings | [All module headers, classes, and public methods] | [no finding] | [none] |
+| Four-space indentation and imports/layout | [All Python source and test files] | [no finding ] | [no change needed] |
+| Focused methods / duplication / dead or commented code | [console.py, test_queries.py, test_workflows.py] | [no finding] | [refactored] |
+| Globals / leakage / unnecessary inheritance or frameworks | [project smartcare] | [no finding] | [no change needed] |
+| No SQLite/persistence/repository ABCs/speculative features | [Entire project/ directory] | [no finding] | [erified by codebase] |
+| Synthetic data / secrets / dependencies / provenance | [entire repository] | [no finding] | [verified by audit] |
+| Significant common Copilot contributions and human verification | [project/smartcare/queries.py, services.py, console.py] | [Finding] | [REJECTED and MODIFIED by human.] |
 | PG plan/diff/test approvals and Stage 11 VERIFY/TRUST | [response] | [response] | [response] |
 
 | AI claim | Affected requirement/code | Human check | Accept/Modify/Reject and reason | Actual outcome/action or no change |
@@ -100,18 +100,18 @@ Available AI evidence and missing evidence honestly disclosed: [response]
 
 | README item | Location | Verifier | Result/gap |
 |---|---|---|---|
-| Purpose and included common/PG scope | [response] | [response] | [response] |
-| Out-of-scope capabilities and known limitations | [response] | [response] | [response] |
-| Confirmed teaching Python version and dependency installation | [response] | [response] | [response] |
-| Working directory / demo / interactive / test commands | [response] | [response] | [response] |
-| Repository structure and architecture responsibilities | [response] | [response] | [response] |
-| Responsible AI summary / synthetic-data rule | [response] | [response] | [response] |
-| Release label/version and SHA links | [response] | [response] | [response] |
-Root README index and project/README verified: [response]
-Fresh clone or extracted ZIP / candidate identity: [response]
-Verifier and clean environment / actual version: [response]
-Setup/run/test commands and observed results: [response]
-Missing local file or setup gap / remedy and recheck: [response]
+| Purpose and included common/PG scope | [README.md, project/README.md] | [Shahdeen] | [Verified] |
+| Out-of-scope capabilities and known limitations | [project/README.md] | [Rashid] | [Verified] |
+| Confirmed teaching Python version and dependency installation | [project/README.md] | [jaspreet] | [Verified] |
+| Working directory / demo / interactive / test commands | [project/README.md] | [Shahdeen] | [Verified] |
+| Repository structure and architecture responsibilities | [project/README.md] | [Jaspreet] | [Verified] |
+| Responsible AI summary / synthetic-data rule | [README.md, project/README.md] | [Rashid] | [Verified] |
+| Release label/version and SHA links | [README.md] | [Shahdeen] | [Verified] |
+Root README index and project/README verified: [Both README files inspected and confirmed]
+Fresh clone or extracted ZIP / candidate identity: [Source archive generated via git archive]
+Verifier and clean environment / actual version: [ndependent verifier using macOS with clean Python 3.14.3 virtual environment]
+Setup/run/test commands and observed results: [all passed]
+Missing local file or setup gap / remedy and recheck: [N/A]
 
 
 ## G Known limitations debt and release notes
