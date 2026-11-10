@@ -28,7 +28,7 @@ def select_appointments(
     """
     filtered_appointments = [
         appointment for appointment in appointments
-        if appointment.practitioner_id == practitioner_id
+        if appointment.practitioner.practitioner_id == practitioner_id
         and (status is None or appointment.status == status)
     ]
     return sorted(filtered_appointments, key=appointment_sort_key)
