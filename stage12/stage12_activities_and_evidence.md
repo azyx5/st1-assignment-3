@@ -116,19 +116,19 @@ Missing local file or setup gap / remedy and recheck: [N/A]
 
 ## G Known limitations debt and release notes
 
-Delivered features: [response]
-Important fixes: [response]
-Architecture/quality improvements: [response]
-Known limitations: [response]
-AI-assisted development note: [response]
+Delivered features: [All features present in codebase.]
+Important fixes: [Correct practitioner schedule conflict, return cancelled appointments, etc.]
+Architecture/quality improvements: [Pure query projections, clear boundary.]
+Known limitations: [Session only storage.]
+AI-assisted development note: [For some test errors and inline code readability suggestions.]
 
 | Debt item | Impact | Priority | Future action | Accepted? / release rationale |
 |---|---|---|---|---|
-| [response] | [response] | [response] | [response] | [response] |
-Session-only synthetic data and minute-precision local time: [response]
-Production auth/roles, portal, notifications, billing/insurance, clinical AI exclusions: [response]
-Scale/concurrency, timezone policy, operations/monitoring, accessibility/usability limitations: [response]
-Difference between accepted scope limit and unresolved required behaviour: [response]
+| [in memory storage] | [Data lost in termination] | [High] | [Implement database] | [Accepted] |
+Session-only synthetic data and minute-precision local time: [Fully tested and meets all acceptance criteria.]
+Production auth/roles, portal, notifications, billing/insurance, clinical AI exclusions: [Out of scope.]
+Scale/concurrency, timezone policy, operations/monitoring, accessibility/usability limitations: [Architectural debt]
+Difference between accepted scope limit and unresolved required behaviour: [Accepted scope]
 PG assurance residual risks / owner / status or not applicable: [response]
 
 
@@ -136,40 +136,40 @@ PG assurance residual risks / owner / status or not applicable: [response]
 
 | Requirement/claim | Reproduction/observation | Impact/severity | Owner/action | Corrective diff | Focused/full recheck | Residual limit |
 |---|---|---|---|---|---|---|
-| [response] | [response] | [response] | [response] | [response] | [response] | [response] |
-Justified no-change conclusion if no defect found: [response]
-Release blockers still open / status: [response]
+| [Code based quality] | [full audit] | [Low] | [Rashid, Jaspreet, Shahdeen] | [No defect found] | [python3 -m pytest -q/-v] | [None] |
+Justified no-change conclusion if no defect found: [All functions requirements operate well.]
+Release blockers still open / status: [0]
 
 
 ## I Git review and integration evidence
 
 Issue / PR / diff links and reviewed SHA: [response]
-Independent reviewer / feedback / response: [response]
-Integration commit / full recheck: [response]
-Tracked and untracked file inspection / cleanliness: [response]
-Secrets/staff material/caches/tool-metadata exclusion check: [response]
+Independent reviewer / feedback / response: [Jaspreet]
+Integration commit / full recheck: [Rashid, Jaspreet, Shahdeen]
+Tracked and untracked file inspection / cleanliness: [Verified]
+Secrets/staff material/caches/tool-metadata exclusion check: [Verified]
 Candidate recovery plan / known-good SHA: [response]
-Named substantive contributions: [response]
+Named substantive contributions: [Rashid, Jaspreet, Shahdeen]
 
 
 ## J Human release decision
 
-Decision — READY FOR COURSE RELEASE / READY WITH DOCUMENTED LIMITATIONS / NOT YET READY: [response]
-Approver / date / rationale and evidence: [response]
-What risks remain / conditions / owners: [response]
-Can the team explain the system: [response]
-Can a change be recovered: [response]
-Common decision / PG decision where different: [response]
+Decision — READY FOR COURSE RELEASE / READY WITH DOCUMENTED LIMITATIONS / NOT YET READY: [Ready for release]
+Approver / date / rationale and evidence: [Rashid, 10/11/2026, All requirments satisfied]
+What risks remain / conditions / owners: [Storage across restarts, Rashid]
+Can the team explain the system: [Yes]
+Can a change be recovered: [Yes]
+Common decision / PG decision where different: [N/A]
 
 
 ## K Final tested release SHA
 
 Exact common tested SHA: [response]
 Exact PG tested SHA or not applicable: [response]
-Final submitted SHA / repository URL: [response]
+Final submitted SHA / repository URL: [https://github.com/azyx5/st1-assignment-3]
 Evidence-only later commit and difference explanation: [response]
 Executable changes after testing and re-verification: [response]
-Source ZIP name / SHA correspondence / extracted comparison: [response]
+Source ZIP name / SHA correspondence / extracted comparison: [Extracted]
 
 
 ## L Submission package verification
@@ -189,12 +189,12 @@ Source ZIP name / SHA correspondence / extracted comparison: [response]
 - [ ] Mixed-group common protection and candidate upload routing checked.
 - [ ] Group reflection, confidential individual peer forms and common team viva routed separately.
 
-Confirmed assessment item/upload route: [response]
-Deadline/timezone: [response]
-Repository access arrangement: [response]
-Mixed-candidate upload arrangement: [response]
-Oral/video recording/accessibility arrangements: [response]
-Remaining administration or release dependency: [response]
+Confirmed assessment item/upload route: [Canvas]
+Deadline/timezone: [10/11/2026 (We got an extension)]
+Repository access arrangement: [Shared github repository]
+Mixed-candidate upload arrangement: [N/A]
+Oral/video recording/accessibility arrangements: [Canvas, Cadmus]
+Remaining administration or release dependency: [None]
 
 
 ## M Formative questions
