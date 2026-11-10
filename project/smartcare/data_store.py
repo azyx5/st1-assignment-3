@@ -110,7 +110,7 @@ class SmartCareDataStore:
         The optional excluded appointment ID is ignored. Do not mutate
         records.
         """
-        for appointment in self.list_appointments():
+        for appointment in self._appointments.values():
             if (
                 appointment.appointment_id != exclude_appointment_id
                 and appointment.practitioner.practitioner_id == practitioner_id
