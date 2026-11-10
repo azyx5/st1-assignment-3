@@ -2,39 +2,39 @@
 
 BLANK student response template. Supplied from the beginning in stage12/ in your EXISTING repository; complete it only when you reach Stage 12 after the previous applicable stage is integrated, verified and recorded; preserve project/, tests, earlier records and Git history. UG/common and PG/extended scope must be explicit. Use concise results and versioned links, not copied logs or source. No staff answers or fabricated approvals.
 
-Group/tutorial: [response]
-Members and UG/PG applicability: [response]
+Group/tutorial: [Monday 9.30-11.30]
+Members and UG/PG applicability: [Rashid, Jaspreet, Shahdeem]
 
 
 ## A Release scope and starting SHA
 
-Release label/version and requirements baseline: [response]
-Common starting SHA / branch / applicable members: [response]
+Release label/version and requirements baseline: [SmartCare Assessment 3, all business rules, query rules,fp rules, ui rules implemented]
+Common starting SHA / branch / applicable members: [Rashid, Jaspreet, Shahdeen]
 PG starting SHA / branch / applicable members or not applicable: [response]
 Working-state review and approved integration: [response]
 Protected common candidate and PG differences: [response]
-Feature freeze / owner / verifier: [response]
+Feature freeze / owner / verifier: [Rashid, Jaspreet, Shahdeen]
 
 
 ## B Requirements and release readiness matrix
 
-Tutorial activity 1: All tests pass, README setup is incomplete, one dependency is unreviewed and a known limitation is undocumented. Decide Release / Release with conditions / Do not release and justify: [response]
+Tutorial activity 1: All tests pass, README setup is incomplete, one dependency is unreviewed and a known limitation is undocumented. Decide Release / Release with conditions / Do not release and justify: [all tests passed]
 
 Tutorial activity 2 and actual readiness matrix. Add exact requirement/acceptance IDs, evidence and reviewer; distinguish common/PG applicability.
 
 | Release claim / requirement / scope | Evidence | Location/link and SHA | Reviewer | Sufficient? | Gap/action |
 |---|---|---|---|---|---|
-| Cancellation history works | [response] | [response] | [response] | [response] | [response] |
-| Architecture responsibilities are appropriate | [response] | [response] | [response] | [response] | [response] |
+| Cancellation history works | [store.find_appointment and appointments.find_appointment return the cancelled instance with status == CANCELLED; scheduled slot freed; all-status query lists record.] | [in code] | [Jaspreet] | [yes] | [none] |
+| Architecture responsibilities are appropriate | [Entities (domain.py) own invariants; repository (data_store.py) manages session collections; services (services.py) orchestrate workflows; queries (queries.py) are pure projections; console (console.py) owns UI.] | [incode] | [Shahdeen] | [yes] | [none] |
 | Rescheduling is safe — PG only | [response] | [response] | [response] | [response] | [response] |
-| AI use is responsible — common recheck / PG assurance | [response] | [response] | [response] | [response] | [response] |
-| System is maintainable | [response] | [response] | [response] | [response] | [response] |
-| FR-01–03 register/find and validation | [response] | [response] | [response] | [response] | [response] |
-| FR-04–05 booking/conflict rules | [response] | [response] | [response] | [response] | [response] |
-| FR-06–08 cancellation/history/find | [response] | [response] | [response] | [response] | [response] |
-| FR-09 and QRY/FP listing/filter/order/purity | [response] | [response] | [response] | [response] | [response] |
-| UI full console sequence and error recovery | [response] | [response] | [response] | [response] | [response] |
-| Session-only scope / FR-10 retired | [response] | [response] | [response] | [response] | [response] |
+| AI use is responsible — common recheck / PG assurance | [Copilot suggestions audited; speculative persistence proposals (SQLite/files) rejected; pure query refactor verified against contracts.] | [responsibly used, like copilot sections insome md files] | [Shahdeen, Jaspreet, Rashid] | [yes] | [none] |
+| System is maintainable | [all throughout, and tests pass] | [project] | [Everonereviewed] | [yes] | [none] |
+| FR-01–03 register/find and validation | [non-blank IDs] | [tests/test_domain.py and test_regressions.py] | [Rashid, Jaspreet] | [yes] | [yes, but fixed] |
+| FR-04–05 booking/conflict rules | [conflicts rejected] | [test_services.py, test_regressions.py] | [Jaspreet, Shahdeen] | [yes] | [none] |
+| FR-06–08 cancellation/history/find | [secure cancellation transition] | [test_services.py, test_domain.py] | [Shahdeen and Jaspreet] | [yes] | [none] |
+| FR-09 and QRY/FP listing/filter/order/purity | [status filtering, tie breaking, non mutating pure queries] | [test_queries.py, test_workflows.py] | [Jaspreet] | [yes] | [none] |
+| UI full console sequence and error recovery | [menu options] | [test_workflows.py] | [Shahdeen] | [yes] | [none] |
+| Session-only scope / FR-10 retired | [in session memrory] | [project] | [Whole team] | [yes] | [none] |
 | PG RES and assurance integration | [response] | [response] | [response] | [response] | [response] |
 
 
